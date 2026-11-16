@@ -1,0 +1,33 @@
+.message {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.4rem;
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+
+  &[data-tone='error'] {
+    color: #ffb4ad;
+    background: #351f22;
+  }
+
+  &[data-tone='warning'] {
+    color: #efd19e;
+    background: #342a1e;
+  }
+
+  &[data-tone='success'] {
+    color: var(--success-text);
+    background: #1d2d26;
+  }
+
+  &[data-variant='compact'] {
+    padding: 0;
+    background: transparent;
+  }
+}

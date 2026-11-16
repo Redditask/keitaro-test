@@ -1,0 +1,57 @@
+.picker {
+  display: grid;
+  min-width: 0;
+  gap: 0.55rem;
+}
+
+.countries {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  min-height: 1.65rem;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: var(--surface-raised);
+  color: var(--text-color);
+  font-size: 0.8rem;
+  font-weight: 590;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+
+  .removeIcon {
+    flex: none;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  &:hover:not(:disabled) {
+    background: var(--selection);
+  }
+  &:focus-visible {
+    outline-offset: 1px;
+  }
+  &:disabled {
+    color: var(--text-disabled);
+    cursor: default;
+  }
+}

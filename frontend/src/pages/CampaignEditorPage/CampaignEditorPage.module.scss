@@ -1,0 +1,18 @@
+@use '../../styles/page-transition';
+
+.page {
+  @include page-transition.reveal;
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+
+  > a {
+    justify-self: start;
+  }
+}
+
+.loading {
+  display: grid;
+  gap: 1.05rem;
+  margin-top: 0.65rem;
+}

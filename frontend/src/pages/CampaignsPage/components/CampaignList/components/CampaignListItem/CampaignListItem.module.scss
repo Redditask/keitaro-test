@@ -1,0 +1,66 @@
+.row {
+  position: relative;
+
+  & + & td {
+    border-top: 1px solid var(--border-color);
+  }
+
+  &:last-child {
+    td:first-child {
+      border-bottom-left-radius: 0.45rem;
+    }
+
+    td:last-child {
+      border-bottom-right-radius: 0.45rem;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    td {
+      background: var(--row-hover);
+    }
+  }
+}
+
+.campaignName {
+  color: var(--text-color);
+  font-weight: 590;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.id {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  display: inline-flex;
+  gap: 0.42rem;
+  align-items: center;
+  color: var(--text-muted);
+
+  &::before {
+    content: '';
+    flex: none;
+    width: 0.46rem;
+    height: 0.46rem;
+    border-radius: 50%;
+    background: var(--text-disabled);
+  }
+
+  &[data-active] {
+    color: var(--text-color);
+
+    &::before {
+      background: var(--success-text);
+    }
+  }
+}

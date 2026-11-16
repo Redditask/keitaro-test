@@ -1,0 +1,64 @@
+@use '../../styles/page-transition';
+
+.page {
+  @include page-transition.reveal;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 1rem;
+
+  > * {
+    grid-column: 1 / -1;
+  }
+}
+
+.heading,
+.results {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.heading {
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 0.55rem;
+
+  > :first-child {
+    flex: 1;
+  }
+}
+
+.results {
+  row-gap: 0.95rem;
+
+  > * {
+    grid-column: 1 / -1;
+  }
+
+  > nav {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 33rem) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .results > nav {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spinning {
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

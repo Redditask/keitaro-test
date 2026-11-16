@@ -1,0 +1,44 @@
+@use '../../../../styles/form-controls';
+
+.form {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 1.65rem);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+
+  > label,
+  > span {
+    font-weight: 600;
+  }
+
+  > input {
+    @include form-controls.field;
+  }
+}
+
+.errorDetail {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.4rem;
+}
+
+@media (max-width: 32rem) {
+  .actions > * {
+    width: 100%;
+  }
+}

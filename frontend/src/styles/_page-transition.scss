@@ -1,0 +1,12 @@
+@mixin reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: page-reveal 180ms ease-out;
+  }
+
+  @keyframes page-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(0.35rem);
+    }
+  }
+}

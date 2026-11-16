@@ -1,0 +1,15 @@
+.block {
+  display: block;
+  border-radius: 0.35rem;
+  background: var(--selection);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: pulse 1.25s ease-in-out alternate infinite;
+  }
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.48;
+  }
+}

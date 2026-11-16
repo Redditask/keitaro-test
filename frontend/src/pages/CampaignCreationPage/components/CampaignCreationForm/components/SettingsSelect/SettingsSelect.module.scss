@@ -1,0 +1,14 @@
+@use '../../../../../../styles/form-controls';
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  select {
+    @include form-controls.field;
+  }
+}

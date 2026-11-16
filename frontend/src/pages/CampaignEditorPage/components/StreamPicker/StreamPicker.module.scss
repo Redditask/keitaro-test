@@ -1,0 +1,70 @@
+@use '../../../../styles/form-controls';
+
+.picker {
+  min-width: 0;
+  border-inline-end: 1px solid var(--border-color);
+}
+
+.desktop {
+  padding: 1.1rem 0.72rem;
+
+  p {
+    padding: 0 0.65rem 0.45rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 650;
+  }
+  ul {
+    display: grid;
+    gap: 0.16rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  button {
+    width: 100%;
+    min-height: 2.35rem;
+    padding: 0.38rem 0.66rem;
+    border: 0;
+    border-radius: 0.45rem;
+    background: transparent;
+    text-align: start;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--row-hover);
+    }
+    &[aria-pressed='true'] {
+      background: var(--selection);
+      color: var(--accent);
+      font-weight: 650;
+    }
+    &:disabled {
+      cursor: default;
+    }
+  }
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .picker {
+    border: 0;
+  }
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: grid;
+    gap: 0.28rem;
+    font-weight: 630;
+  }
+  select {
+    @include form-controls.field;
+    font-weight: 450;
+  }
+}

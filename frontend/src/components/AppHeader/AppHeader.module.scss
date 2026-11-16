@@ -1,0 +1,62 @@
+.header {
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav {
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  font-size: 0.875rem;
+
+  > svg {
+    width: 0.94rem;
+    height: 0.94rem;
+    color: var(--text-muted);
+    flex: none;
+  }
+}
+
+.brand,
+.navLink {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  font-size: 1.1rem;
+  font-weight: 755;
+  letter-spacing: -0.042em;
+
+  svg {
+    width: 1.44rem;
+    height: 1.44rem;
+    color: var(--accent);
+  }
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+.section {
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 24rem) {
+  .nav {
+    gap: 0.35rem;
+  }
+  .nav > svg {
+    width: 0.75rem;
+  }
+}

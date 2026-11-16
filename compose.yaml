@@ -1,0 +1,63 @@
+x-backend: &backend
+  build: ./backend
+  environment: &database-env
+    DATABASE_URL: postgresql+psycopg://relay:relay-local@db:5432/relay
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: relay
+      POSTGRES_USER: relay
+      POSTGRES_PASSWORD: relay-local
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"',
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  migrate:
+    <<: *backend
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    <<: *backend
+    environment:
+      <<: *database-env
+      KEITARO_BASE_URL: ${KEITARO_BASE_URL:?Set KEITARO_BASE_URL in the root .env}
+      KEITARO_API_KEY: ${KEITARO_API_KEY:?Set KEITARO_API_KEY in the root .env}
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).close()
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:8787:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+        restart: true
+
+volumes:
+  postgres-data:

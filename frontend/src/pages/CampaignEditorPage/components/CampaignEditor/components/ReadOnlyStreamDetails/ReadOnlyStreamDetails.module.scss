@@ -1,0 +1,11 @@
+.details {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem 0;
+  color: var(--text-muted);
+}
+
+.destination {
+  color: var(--text-color);
+  overflow-wrap: anywhere;
+}
