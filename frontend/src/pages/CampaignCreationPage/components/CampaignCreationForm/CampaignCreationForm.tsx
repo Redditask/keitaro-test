@@ -21,6 +21,7 @@ export function CampaignCreationForm({ listPath }: { listPath: string }) {
     blocker,
     submit,
   } = useCampaignCreation(listPath);
+
   const optionsDisabled = locked || !options.data;
 
   return (

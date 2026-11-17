@@ -1,0 +1,23 @@
+@use '../../../styles/form-controls';
+
+.input {
+  position: relative;
+  min-width: 0;
+
+  input {
+    @include form-controls.field;
+    padding-inline-start: 2rem;
+    text-overflow: ellipsis;
+  }
+
+  svg {
+    position: absolute;
+    inset-inline-start: 0.65rem;
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+}

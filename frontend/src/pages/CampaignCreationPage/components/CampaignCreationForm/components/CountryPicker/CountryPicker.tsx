@@ -14,7 +14,9 @@ export function CountryPicker({
   disabled: boolean;
 }) {
   const [query, setQuery] = useState('');
+
   const selectedCodes = new Set(countries.map(({ code }) => code));
+
   const options = searchCountries(query).filter(({ code }) => !selectedCodes.has(code));
 
   return (

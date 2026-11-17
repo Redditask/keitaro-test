@@ -12,8 +12,10 @@ import styles from './CampaignsPage.module.scss';
 
 export function CampaignsPage() {
   const { search, state } = useLocation();
-  const page = readCampaignPage(search);
   const created = state?.created as { id: number; name: string } | undefined;
+
+  const page = readCampaignPage(search);
+
   const query = useQuery({
     queryKey: [...campaignListKey, page],
     queryFn: ({ signal }) => fetchCampaigns(page, signal),

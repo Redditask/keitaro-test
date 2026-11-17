@@ -5,30 +5,46 @@ export function creationErrorDetails(error: Error): string[] {
     return [];
   }
 
-  const { details } = error;
-  const reason = 'reason' in details && typeof details.reason === 'string' ? details.reason : '';
-  const step =
-    'step' in details && typeof details.step === 'string' ? details.step.replaceAll('_', ' ') : '';
-  const fields =
-    'fields' in details && Array.isArray(details.fields)
-      ? details.fields
-          .filter((field): field is string => typeof field === 'string')
-          .map((field) => field.replaceAll('_', ' '))
-      : [];
+  const {
+    reason,
+    step,
+    upstream_status: upstreamStatus,
+    fields,
+    alias,
+    campaign_id: campaignId,
+  } = error.details as Record<string, unknown>;
 
-  const context = [
-    step && `Stage — ${step}`,
-    'upstream_status' in details &&
-      typeof details.upstream_status === 'number' &&
-      `Keitaro — HTTP ${details.upstream_status}`,
-    fields.length > 0 && `Fields — ${fields.join(', ')}`,
-  ].filter(Boolean);
-  const campaign = [
-    'alias' in details && typeof details.alias === 'string' && `Alias — ${details.alias}`,
-    'campaign_id' in details &&
-      typeof details.campaign_id === 'number' &&
-      `Campaign ID — ${details.campaign_id}`,
-  ].filter(Boolean);
+  const context: string[] = [];
 
-  return [reason, context.join(' · '), campaign.join(' · ')].filter(Boolean);
+  if (typeof step === 'string' && step) {
+    context.push(`Stage — ${step.replaceAll('_', ' ')}`);
+  }
+
+  if (typeof upstreamStatus === 'number') {
+    context.push(`Keitaro — HTTP ${upstreamStatus}`);
+  }
+
+  if (Array.isArray(fields)) {
+    const fieldNames = fields
+      .filter((field): field is string => typeof field === 'string')
+      .map((field) => field.replaceAll('_', ' '));
+
+    if (fieldNames.length > 0) {
+      context.push(`Fields — ${fieldNames.join(', ')}`);
+    }
+  }
+
+  const campaign: string[] = [];
+
+  if (typeof alias === 'string' && alias) {
+    campaign.push(`Alias — ${alias}`);
+  }
+
+  if (typeof campaignId === 'number') {
+    campaign.push(`Campaign ID — ${campaignId}`);
+  }
+
+  const reasonText = typeof reason === 'string' ? reason : '';
+
+  return [reasonText, context.join(' · '), campaign.join(' · ')].filter(Boolean);
 }

@@ -87,15 +87,19 @@ export function useCampaignEditor(initial: CampaignStreams) {
 
   function selectStream(id: number) {
     if (pending) return;
+
     setSelectedId(id);
     setOfferFeedback(undefined);
+
     setStreamFeedback(undefined);
     setPublishFeedback(undefined);
   }
 
   function editOffer(edit: OfferEdit) {
     if (!stream?.is_editable || pending) return;
+
     setPublishFeedback(undefined);
+
     const result = editOffers(stream.offers, offers, edit);
 
     if ('error' in result) {
@@ -124,15 +128,18 @@ export function useCampaignEditor(initial: CampaignStreams) {
       case 'refresh':
         setStreamFeedback(undefined);
         refresh.mutate(stream.id);
+
         break;
       case 'publish':
         setPublishFeedback(undefined);
         publication.mutate({ id: stream.id, offers });
+
         break;
       case 'cancel':
         updateDraft(stream.id);
         setOfferFeedback(undefined);
         setPublishFeedback(undefined);
+
         break;
     }
   }

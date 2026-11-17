@@ -13,6 +13,7 @@ export function OfferTableRow({
   onEdit: (edit: OfferEdit) => void;
 }) {
   const { offer_id, name, state, share, is_pinned } = offer;
+
   const pinned = state === 'active' && is_pinned;
   const pinLabel = pinned ? 'Unpin' : 'Pin';
   const displayedShare = state === 'removed' ? 0 : share;

@@ -52,6 +52,7 @@ export function CampaignEditor({ initial }: { initial: CampaignStreams }) {
               onSelect={editor.selectStream}
               disabled={pending}
             />
+
             <div className={styles.content} aria-busy={pending}>
               <div className={styles.toolbar}>
                 <h2>{stream.is_editable ? 'Offers' : stream.name}</h2>

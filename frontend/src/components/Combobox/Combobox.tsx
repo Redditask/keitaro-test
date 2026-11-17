@@ -1,6 +1,7 @@
-import { useId } from 'react';
-import type { ReactNode } from 'react';
-import { useCombobox } from '@/hooks/useCombobox';
+import { useId, useState } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
+import { ComboboxInput } from './ComboboxInput/ComboboxInput';
+import { ComboboxList } from './ComboboxList/ComboboxList';
 import styles from './Combobox.module.scss';
 
 interface ComboboxProps<Item> {
@@ -33,77 +34,98 @@ export function Combobox<Item>({
   const id = useId();
   const listId = `${id}-list`;
 
-  const interaction = useCombobox({
-    options,
-    getKey,
-    value,
-    hasSelection,
-    disabled,
-    onValueChange,
-    onSelect,
-  });
-  const { expanded, activeIndex } = interaction;
+  const [open, setOpen] = useState(false);
+  const [activeKey, setActiveKey] = useState<string | number>();
+
+  const expanded = open && !disabled && !hasSelection;
+  const activeIndex = expanded ? options.findIndex((item) => getKey(item) === activeKey) : -1;
+
+  function openList() {
+    setOpen(true);
+  }
+
+  function closeList() {
+    setOpen(false);
+
+    setActiveKey(undefined);
+  }
+
+  function selectOption(item: Item) {
+    onSelect(item);
+
+    closeList();
+  }
+
+  function changeValue(nextValue: string) {
+    openList();
+
+    setActiveKey(undefined);
+
+    onValueChange(nextValue);
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.nativeEvent.isComposing || disabled || hasSelection) return;
+
+    if (event.key === 'Escape' && expanded) {
+      event.preventDefault();
+
+      closeList();
+
+      return;
+    }
+
+    if (event.key === 'Enter' && expanded && (activeIndex >= 0 || value)) {
+      event.preventDefault();
+
+      const item = options[Math.max(activeIndex, 0)];
+      if (item !== undefined) selectOption(item);
+
+      return;
+    }
+
+    if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && options.length) {
+      event.preventDefault();
+
+      openList();
+
+      const nextIndex =
+        event.key === 'ArrowDown'
+          ? (activeIndex + 1) % options.length
+          : (Math.max(activeIndex, 0) - 1 + options.length) % options.length;
+
+      setActiveKey(getKey(options[nextIndex]));
+    }
+  }
 
   return (
     <div className={styles.control}>
-      <div className={styles.input}>
-        <svg
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.55"
-          strokeLinecap="round"
-          aria-hidden="true"
-        >
-          <circle cx="8.5" cy="8.5" r="4.6" />
-          <path d="m12 12 4.25 4.25" />
-        </svg>
+      <ComboboxInput
+        id={id}
+        listId={listId}
+        label={label}
+        value={value}
+        placeholder={placeholder}
+        disabled={disabled}
+        expanded={expanded}
+        activeOptionId={activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined}
+        onOpen={openList}
+        onClose={closeList}
+        onValueChange={changeValue}
+        onKeyDown={handleKeyDown}
+      />
 
-        <input
-          id={id}
-          role="combobox"
-          aria-label={label}
-          aria-autocomplete="list"
-          aria-expanded={expanded}
-          aria-controls={listId}
-          aria-activedescendant={activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined}
-          value={value}
-          placeholder={placeholder}
-          disabled={disabled}
-          autoComplete="off"
-          onFocus={interaction.openList}
-          onClick={interaction.openList}
-          onBlur={interaction.closeList}
-          onChange={(event) => interaction.changeValue(event.currentTarget.value)}
-          onKeyDown={interaction.handleKeyDown}
-        />
-      </div>
-
-      <div className={styles.popup} hidden={!expanded}>
-        <ul id={listId} className={styles.options} role="listbox" aria-label={label}>
-          {expanded &&
-            options.map((item, index) => (
-              <li
-                key={getKey(item)}
-                id={`${listId}-${index}`}
-                ref={index === activeIndex ? interaction.activeOptionRef : undefined}
-                className={styles.option}
-                role="option"
-                aria-selected={index === activeIndex}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => interaction.selectOption(item)}
-              >
-                {renderOption(item)}
-              </li>
-            ))}
-        </ul>
-
-        {status && (
-          <p className={styles.status} role="status">
-            {status}
-          </p>
-        )}
-      </div>
+      <ComboboxList
+        id={listId}
+        label={label}
+        expanded={expanded}
+        activeIndex={activeIndex}
+        options={options}
+        getKey={getKey}
+        renderOption={renderOption}
+        status={status}
+        onSelect={selectOption}
+      />
     </div>
   );
 }
